@@ -5,13 +5,14 @@ A collection of scripts for Solution Architects working with [Metronome](https:/
 ## Layout
 
 ```
-.env                 # API token and shared defaults (gitignored)
-send_usage.py        # Send usage events
-events.json          # Editable payload for send_usage.py
-.cursor/skills/      # Metronome Cursor skills
+.env                         # API token and shared defaults (gitignored)
+scripts/send_usage/          # Send usage events
+  send_usage.py
+  events.json
+.cursor/skills/              # Metronome Cursor skills
 ```
 
-Add new scripts at the repo root (or in a named folder) and list them in [Scripts](#scripts).
+Add new scripts under `scripts/<name>/` and list them in [Scripts](#scripts).
 
 ## Prerequisites
 
@@ -37,13 +38,12 @@ METRONOME_CUSTOMER_ID=
 
 | Script                                | What it does                              | Input         |
 | ------------------------------------- | ----------------------------------------- | ------------- |
-| `[send_usage.py](#send-usage-events)` | Ingest usage events via `POST /v1/ingest` | `events.json` |
-
+| [`scripts/send_usage`](#send-usage-events) | Ingest usage events via `POST /v1/ingest` | `scripts/send_usage/events.json` |
 
 Run any script from the repo root:
 
 ```bash
-python3 <script>.py
+python3 scripts/<name>/<script>.py
 ```
 
 ---
@@ -52,7 +52,7 @@ python3 <script>.py
 
 ### Send usage events
 
-Sends one or more usage events from `events.json`. Edit that file between runs, then execute the script again.
+Sends one or more usage events from `scripts/send_usage/events.json`. Edit that file between runs, then execute the script again.
 
 **Also requires**
 
@@ -62,14 +62,14 @@ Sends one or more usage events from `events.json`. Edit that file between runs, 
 **Run**
 
 ```bash
-python3 send_usage.py --dry-run
-python3 send_usage.py
-python3 send_usage.py --file path/to/other-events.json
+python3 scripts/send_usage/send_usage.py --dry-run
+python3 scripts/send_usage/send_usage.py
+python3 scripts/send_usage/send_usage.py --file path/to/other-events.json
 ```
 
 Each request can include up to 100 events. Larger files are split automatically.
 
-`events.json`
+`scripts/send_usage/events.json`
 
 Top-level `customer_id` applies to every event unless an event sets its own.
 

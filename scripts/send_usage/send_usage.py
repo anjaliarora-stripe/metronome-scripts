@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Send usage events from events.json to Metronome.
 
-Edit events.json, then run:
+Edit events.json, then run from the repo root:
 
-    python3 send_usage.py
+    python3 scripts/send_usage/send_usage.py
 
 Each run generates a new transaction_id unless you set one on the event,
 so updated quantities are ingested as new usage (same ID is treated as a
@@ -25,8 +25,9 @@ from pathlib import Path
 
 BATCH_SIZE = 100
 MAX_RETRIES = 5
-ROOT = Path(__file__).resolve().parent
-DEFAULT_EVENTS_FILE = ROOT / "events.json"
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parent.parent
+DEFAULT_EVENTS_FILE = SCRIPT_DIR / "events.json"
 
 
 def load_env(path: Path) -> None:
@@ -169,7 +170,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    load_env(ROOT / ".env")
+    load_env(REPO_ROOT / ".env")
     token = os.environ.get("METRONOME_API_TOKEN", "").strip()
     base_url = os.environ.get(
         "METRONOME_BASE_URL", "https://api.metronome.com/v1"
