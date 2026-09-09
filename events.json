@@ -1,0 +1,21 @@
+{
+  "customer_id": "sa-onboarding-demo",
+  "events": [
+    {
+      "event_type": "api_call",
+      "properties": {
+        "model": "gpt-4",
+        "region": "us-east-1",
+        "tokens": "1500"
+      }
+    },
+    {
+      "event_type": "api_call",
+      "properties": {
+        "model": "gpt-4o",
+        "region": "us-west-2",
+        "tokens": "800"
+      }
+    }
+  ]
+}
