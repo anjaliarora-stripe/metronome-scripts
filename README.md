@@ -1,4 +1,4 @@
-# Metronome Solution Architect onboarding scripts
+# Metronome SA helper scripts
 
 A collection of scripts for Solution Architects working with [Metronome](https://docs.metronome.com/). Shared auth lives in `.env`.
 
