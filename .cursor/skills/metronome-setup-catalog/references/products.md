@@ -41,6 +41,18 @@ Both fields take an array of property names that must be a subset of the billabl
 
 `presentation_group_key` controls visibility on the invoice. `pricing_group_key` controls which rate is applied. They are independent — you can price by dimension without showing it, or show it without pricing by it. The most common mistake is setting `presentation_group_key` when the user only wanted internal differentiation (keeps model hidden from customer).
 
+**Tiers and rounding apply per presentation group.** Metronome applies tiered rates separately to each presentation group value, so splitting a volume-tiered product by org restarts the tiers for every org. `quantity_conversion` rounding also happens per group. Only split products whose price is flat and unconverted, or where per-group tiers are intended. The reverse also bites: a MAX metric grouped by a key, on a product that is *not* split by it, bills the single largest group's value, not the sum of each group's peak.
+
+## Tags
+
+Always set `"tags": ["usage"]` on every USAGE product. Commits and credits can then cover all usage without listing product IDs, and new usage products are covered automatically:
+
+```json
+"applicable_product_tags": ["usage"]
+```
+
+Add other tags (for example a product family) alongside `usage`, never instead of it.
+
 ## Per-unit scaling (quantity_conversion)
 
 When pricing is expressed per-N units (e.g., $0.02 per 1,000 tokens), use `quantity_conversion` on the product to avoid fractional cent prices.
@@ -68,6 +80,7 @@ Content-Type: application/json
   "name": "<product name>",
   "type": "USAGE",
   "billable_metric_id": "<billable_metric_uuid>",
+  "tags": ["usage"],
   "pricing_group_key": ["<dimension>"],
   "presentation_group_key": ["<dimension>"],
   "quantity_conversion": {
@@ -90,7 +103,8 @@ Required fields: `name`, `type`.
 {
   "name": "API calls",
   "type": "USAGE",
-  "billable_metric_id": "<bm_uuid>"
+  "billable_metric_id": "<bm_uuid>",
+  "tags": ["usage"]
 }
 ```
 
@@ -100,6 +114,7 @@ Required fields: `name`, `type`.
   "name": "Tokens processed",
   "type": "USAGE",
   "billable_metric_id": "<bm_uuid>",
+  "tags": ["usage"],
   "pricing_group_key": ["model_name"],
   "quantity_conversion": {
     "conversion_factor": 1000,
@@ -127,6 +142,8 @@ Required fields: `name`, `type`.
 
 ## Traps to avoid
 
+- Do not create a USAGE product without `"tags": ["usage"]` — tags are editable later, but commits and credits scoped by tag silently skip untagged products.
+- Do not split a volume-tiered product with `presentation_group_key` unless per-group tiers are intended — tiers restart for each group value.
 - Do not forget to pass `billable_metric_id` for USAGE products — the API accepts the call without it but the product will not accumulate any usage charges.
 - Do not use COMPOSITE or PRO_SERVICE without confirming the feature flag is enabled on your account.
 - Do not use `presentation_group_key` for a property not in the billable metric's `group_keys` — rates will not resolve correctly.

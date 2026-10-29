@@ -91,7 +91,8 @@ POST /v1/contract-pricing/products/create
 {
   "name": "Inference",
   "type": "USAGE",
-  "billable_metric_id": "<metric_id_from_step_1>"
+  "billable_metric_id": "<metric_id_from_step_1>",
+  "tags": ["usage"]
 }
 ```
 
@@ -268,7 +269,8 @@ POST /v1/contract-pricing/products/create
 {
   "name": "API Calls",
   "type": "USAGE",
-  "billable_metric_id": "<metric_id>"
+  "billable_metric_id": "<metric_id>",
+  "tags": ["usage"]
 }
 ```
 
@@ -392,12 +394,12 @@ POST /v1/billable-metrics/create
 
 ```json
 POST /v1/contract-pricing/products/create
-{ "name": "Compute", "type": "USAGE", "billable_metric_id": "<compute_metric_id>" }
+{ "name": "Compute", "type": "USAGE", "billable_metric_id": "<compute_metric_id>", "tags": ["usage"] }
 ```
 
 ```json
 POST /v1/contract-pricing/products/create
-{ "name": "Storage", "type": "USAGE", "billable_metric_id": "<storage_metric_id>" }
+{ "name": "Storage", "type": "USAGE", "billable_metric_id": "<storage_metric_id>", "tags": ["usage"] }
 ```
 
 3. Rate card:

@@ -82,10 +82,12 @@ Content-Type: application/json
 {
   "name": "<product name>",
   "type": "USAGE",
-  "billable_metric_id": "<billable_metric_id from Step 1>"
+  "billable_metric_id": "<billable_metric_id from Step 1>",
+  "tags": ["usage"]
 }
 ```
 
+Always tag every USAGE product `usage`, so commits and credits can later be scoped to all usage with `applicable_product_tags: ["usage"]`.
 **Save: `id` → product_id**
 
 ---
@@ -218,6 +220,7 @@ A line item with your product name and a non-zero quantity confirms the full cha
 ## Critical rules
 
 - *Group keys are immutable after creation.* Plan all pricing dimensions upfront — unused group keys are free, missing ones cannot be added retroactively.
+- *Every USAGE product gets the `usage` tag.* Set `"tags": ["usage"]` on create, so commits and credits can scope to all usage products with `applicable_product_tags: ["usage"]` instead of listing product IDs.
 - *Rate cards are shared.* Changing a rate propagates to all contracts without overrides. Never modify the rate card for one customer — use a contract-level override.
 - *All monetary amounts are in cents.* $1 → `100`, $0.01 → `1`.
 - *`entitled: true` is required on each rate.* Omitting it silently disables the product.

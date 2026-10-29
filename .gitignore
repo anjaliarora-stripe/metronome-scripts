@@ -1,3 +1,5 @@
 .env
 __pycache__/
 *.pyc
+scripts/build_workos_model/state*.json
+scripts/build_workos_model/events_*.json

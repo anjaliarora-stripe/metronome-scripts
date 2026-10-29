@@ -127,6 +127,8 @@ Required fields: `name`, `aggregation_type`.
 - Do not use SUM without `aggregation_key` — the API accepts the call but aggregation silently produces zero.
 - Do not send `"tokens": "1500"` (string) in events for a SUM metric — the property must be a number. Strings cause silent zero aggregation.
 - Do not use `group_keys` without declaring matching `property_filters` — every property in `group_keys` AND the `aggregation_key` must appear in `property_filters` or the API returns a confusing error.
+- Do not add a group key that some events lack — group key filters must be required (`exists: true`), so events without the property are not counted. Only group on properties every event sends, or have the sender use a placeholder value.
+- Do not send events in the same minute you create (or swap a product to) a new streaming metric — events that arrive before the metric is live are not added to it, and resending them with the same `transaction_id` is dropped as a duplicate. Wait for the metric, then send.
 - Do not create the metric and move on — generate a sample event and verify ingestion before building downstream objects.
 - Do not use `request_id` or other unbounded identifiers as group keys.
 - Do not set `presentation_group_key` on the product for dimensions you want to keep internal — group_key on the metric alone is sufficient for internal aggregation.
